@@ -24,7 +24,39 @@
     </div>
 
     <script>
-        
+        async function sendMessage(){
+            const inputBox = document.querySelector('#inputbox');
+            const message = inputBox.value;
+
+            appendMessage(message, "user");
+
+            inputBox.value = '';
+
+            try {
+                const response = await axios.post('http://localhost:3000/message', {
+                    prompt: message
+                })
+
+                console.log(response)
+                appendMessage(response.data.ai_response.content, "bot");
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        function appendMessage(message, sender) {
+            const chatbox = document.querySelector('#chatbox');
+
+            const msgElement = document.createElement("p");
+            msgElement.classList = sender === 'user' ? 'text-right' : 'text-left';
+
+            msgElement.innerText = message;
+
+            chatbox.appendChild(msgElement);
+
+            chatbox.scrollTo = chatbox.scrollHeight;
+        }
     </script>
 </body>
 </html>
